@@ -3,7 +3,7 @@ from user.models import CustomUser
 from djoser.serializers import UserSerializer as BaseUserSerializer, UserCreateSerializer as BaseUserCreateSerializer
 from bms.models import DonorProfile
 from django.contrib.auth import get_user_model
-
+from drf_yasg.utils import swagger_auto_schema
 
 class UserCreateSerializer(BaseUserCreateSerializer):
     image = serializers.ImageField()
@@ -30,6 +30,7 @@ class UserSerializer(BaseUserSerializer):
         fields = ['id', 'username', 'email']
         ref_name = "CustomUserSerializer"
 
+    
 
 class DonorProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
