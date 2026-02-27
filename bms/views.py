@@ -25,7 +25,7 @@ class DonorProfileUpdateView(generics.RetrieveUpdateAPIView):
 class DonorProfileViewSet(ModelViewSet):
     queryset = DonorProfile.objects.all()
     serializer_class = DonorProfileSerializer
-    permission_classes = [IsAuthenticated, IsAdminOnlyDelete]
+    # permission_classes = [IsAuthenticated, IsAdminOnlyDelete]
     parser_classes = [MultiPartParser, FormParser]  # ✅ support image uploads
 
     @swagger_auto_schema(operation_summary="Donor Profile list")
