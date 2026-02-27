@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     "whitenoise.runserver_nostatic",
     'django.contrib.staticfiles',
+    'corsheaders',
     'drf_yasg',
     'rest_framework',
     'djoser',
@@ -38,6 +39,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -67,6 +69,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'blood_bank.wsgi.app'
 
+# During development
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",   # Vite dev server
+    "http://127.0.0.1:5173",
+    "https://your-frontend.vercel.app",  # add your production URL too
+]
+
+# If you use JWT in Authorization headers, also add:
+CORS_ALLOW_HEADERS = [
+    "authorization",
+    "content-type",
+    "accept",
+]
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
