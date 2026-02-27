@@ -1,13 +1,15 @@
 from rest_framework import serializers
-from user.models import CustomUser
 from .models import DonorProfile, BloodRequest, DonationHistory
-from user.serializers import UserSerializer
+
 
 class BloodRequestSerializer(serializers.ModelSerializer):
-    recipient = UserSerializer(read_only=True)
+    # ✅ Shows donor's full name instead of exposing full user object
+    recipient = serializers.StringRelatedField(read_only=True)
+
     class Meta:
         model = BloodRequest
         fields = ['id', 'recipient', 'blood_group', 'location', 'description', 'is_active', 'created_at']
+        read_only_fields = ['recipient', 'created_at']
 
 
 class DonationHistorySerializer(serializers.ModelSerializer):
