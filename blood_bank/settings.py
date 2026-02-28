@@ -82,7 +82,7 @@ CORS_ALLOW_HEADERS = [
     "content-type",
     "accept",
 ]
-
+CORS_ALLOW_CREDENTIALS = True
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
