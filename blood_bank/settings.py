@@ -73,7 +73,7 @@ WSGI_APPLICATION = 'blood_bank.wsgi.app'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",   # Vite dev server
     "http://127.0.0.1:5173",
-    "https://your-frontend.vercel.app",  # add your production URL too
+    "https://blood-drops.vercel.app",  # add your production URL too
 ]
 
 # If you use JWT in Authorization headers, also add:
@@ -171,6 +171,8 @@ SIMPLE_JWT = {
 }
 
 DJOSER = {
+    'SITE_NAME': 'BloodDrops',
+    'DOMAIN': 'blood-drops.vercel.app', 
     'PASSWORD_RESET_CONFIRM_URL':'password/reset/confirm/{uid}/{token}',
     'ACTIVATION_URL':'activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL':True,
