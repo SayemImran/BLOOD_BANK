@@ -172,8 +172,9 @@ SIMPLE_JWT = {
 }
 
 DJOSER = {
-    'SITE_NAME': 'BloodDrops',
-    'DOMAIN': 'blooddrops.vercel.app', 
+    'EMAIL_FRONTEND_PROTOCOL':config('FRONTEND_PROTOCOL'),
+    'EMAIL_FRONTEND_DOMAIN':config('FRONTEND_DOMAIN'),
+    'EMAIL_FRONTEND_SITE_NAME':'BloodDrops',
     'PASSWORD_RESET_CONFIRM_URL':'password/reset/confirm/{uid}/{token}',
     'ACTIVATION_URL':'activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL':True,
