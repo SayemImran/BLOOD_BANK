@@ -73,8 +73,8 @@ WSGI_APPLICATION = 'blood_bank.wsgi.app'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
-    "https://blooddrops.vercel.app",  
-    "https://blood-drops.vercel.app",  
+    "https://blooddrops.vercel.app",
+    "https://blood-drops.vercel.app",
 ]
 
 # If you use JWT in Authorization headers, also add:
