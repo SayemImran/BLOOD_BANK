@@ -5,11 +5,12 @@ from rest_framework.response import Response
 from rest_framework import generics, permissions, status
 from rest_framework.parsers import MultiPartParser, FormParser
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework.decorators import api_view,permission_classes
 from bms.models import DonorProfile, BloodRequest, DonationHistory
 from bms.serializers import BloodRequestSerializer, DonationHistorySerializer
 from user.serializers import DonorProfileSerializer
 from bms.permissions import IsAdminOrReadOnly, IsAdminOnlyDelete
-
+from sslcommerz_lib import SSLCOMMERZ 
 
 # ─── Donor Profile Update View (for image upload) ─────────────────────────
 class DonorProfileUpdateView(generics.RetrieveUpdateAPIView):
@@ -146,3 +147,73 @@ class DonationHistoryViewSet(ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         """Delete the donation history (Admin Only)"""
         return super().destroy(request, *args, **kwargs)
+
+
+# @api_view(['POST'])
+# def initiate_payment(request):
+#         user = request.user
+#         amount = request.data.get("amount")
+#         # user_id = request.data.get("user_id")
+#         settings = { 'store_id': 'blood69a3ec18b5367', 'store_pass': 'blood69a3ec18b5367@ssl', 'issandbox': True }
+#         sslcz = SSLCOMMERZ(settings)
+#         post_body = {}
+#         post_body['total_amount'] = amount
+#         post_body['currency'] = "BDT"
+#         post_body['tran_id'] = f"txn{user_id}{user_id*300}"
+#         post_body['success_url'] = "http://localhost:5173/payment/success/"
+#         post_body['fail_url'] = "http://localhost:5173/payment/failed/"
+#         post_body['cancel_url'] = "http://localhost:5173/"
+#         post_body['emi_option'] = 0
+#         post_body['cus_name'] = f"{user.first_name} {user.last_name}"
+#         post_body['cus_email'] = "test@test.com"
+#         post_body['cus_phone'] = "01700000000"
+#         post_body['cus_add1'] = "customer address"
+#         post_body['cus_city'] = "Dhaka"
+#         post_body['cus_country'] = "Bangladesh"
+#         post_body['shipping_method'] = "NO"
+#         post_body['multi_card_name'] = ""
+#         post_body['num_of_item'] = 1
+#         post_body['product_name'] = "Test"
+#         post_body['product_category'] = "Test Category"
+#         post_body['product_profile'] = "general"
+
+
+#         response = sslcz.createSession(post_body)
+#         print(response)
+#         if response.get("status") == "SUCCESS":
+#             return Response({'payment_url':response['GatewayPageURL']})
+#         return Response({"error": "Payment Initiation failed"})
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def initiate_payment(request):
+    user = request.user
+    amount = request.data.get("amount")
+
+    settings = { 'store_id': 'blood69a3ec18b5367', 'store_pass': 'blood69a3ec18b5367@ssl', 'issandbox': True }
+    sslcz = SSLCOMMERZ(settings)
+    post_body = {}
+    post_body['total_amount'] = amount
+    post_body['currency'] = "BDT"
+    post_body['tran_id'] = f"txn{user.id}{user.id * 300}"  # ✅ user.id not user_id
+    post_body['success_url'] = "http://localhost:5173/payment/success/"
+    post_body['fail_url'] = "http://localhost:5173/payment/failed/"
+    post_body['cancel_url'] = "http://localhost:5173/"
+    post_body['emi_option'] = 0
+    post_body['cus_name'] = f"{user.first_name} {user.last_name}"
+    post_body['cus_email'] = user.email  # ✅ real email
+    post_body['cus_phone'] = "01700000000"
+    post_body['cus_add1'] = "customer address"
+    post_body['cus_city'] = "Dhaka"
+    post_body['cus_country'] = "Bangladesh"
+    post_body['shipping_method'] = "NO"
+    post_body['multi_card_name'] = ""
+    post_body['num_of_item'] = 1
+    post_body['product_name'] = "Blood Donation"
+    post_body['product_category'] = "Donation"
+    post_body['product_profile'] = "general"
+
+    response = sslcz.createSession(post_body)
+    if response.get("status") == "SUCCESS":
+        return Response({'payment_url': response['GatewayPageURL']})
+    return Response({"error": "Payment Initiation failed"}, status=400)
