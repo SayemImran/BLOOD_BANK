@@ -196,9 +196,9 @@ def initiate_payment(request):
     post_body['total_amount'] = amount
     post_body['currency'] = "BDT"
     post_body['tran_id'] = f"txn{user.id}{user.id * 300}"  # ✅ user.id not user_id
-    post_body['success_url'] = "http://localhost:5173/payment/success/"
-    post_body['fail_url'] = "http://localhost:5173/payment/failed/"
-    post_body['cancel_url'] = "http://localhost:5173/"
+    post_body['success_url'] = "https://blooddrops.vercel.app/payment/success/"
+    post_body['fail_url'] = "https://blooddrops.vercel.app/payment/failed/"
+    post_body['cancel_url'] = "https://blooddrops.vercel.app/"
     post_body['emi_option'] = 0
     post_body['cus_name'] = f"{user.first_name} {user.last_name}"
     post_body['cus_email'] = user.email  # ✅ real email
